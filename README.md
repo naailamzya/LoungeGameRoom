@@ -1,59 +1,498 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# LOUNGE GAME ROOM
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Deskripsi Aplikasi
 
-## About Laravel
+**Lounge Game Room** adalah aplikasi berbasis Laravel untuk mengelola penyewaan ruang bermain (gameboard maupun digital). Fungsionalitas utama meliputi:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   Registrasi dan autentikasi pengguna (pelanggan).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   Pencarian dan daftar game room (gameboard & digital).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   Form reservasi (pemesanan waktu & durasi).
 
-## Learning Laravel
+-   Dashboard admin untuk melihat dan mengelola reservasi, rooms, dan receipt.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+-   Pembuatan/print invoice / receipt (menggunakan DOMPDF).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   Fitur unggah gambar, dan manajemen data via panel admin.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Teknologi & Dependensi Utama
 
-### Premium Partners
+1. Backend: PHP 8.2, Laravel 12
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+2. Frontend: Vite, Tailwind CSS, axios
 
-## Contributing
+3. PDF: barryvdh/laravel-dompdf
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. Dev tooling: node & npm (Vite)
 
-## Code of Conduct
+5. Database: MySQL / MariaDB (atau database lain yang didukung Laravel)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. Lain-lain: Composer untuk dependency PHP
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Struktur Project
 
-## License
+```
+Lounge-Game-Room/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── AuthController.php
+│   │   │   ├── Controller.php
+│   │   │   ├── DashboardController.php
+│   │   │   ├── GameRoomController.php
+│   │   │   ├── ReceiptController.php
+│   │   │   └── ReservationController.php
+│   │   └── Middleware/
+│   ├── Models/
+│   │   ├── GameRoom.php
+│   │   ├── Reservation.php
+│   │   └── User.php
+│   └── Providers/
+│
+├── bootstrap/
+├── config/
+│
+├── database/
+│   ├── factories/
+│   ├── migrations/
+│   │   ├── 0001_01_01_0000001_create_cache_table.php
+│   │   ├── 0001_01_01_0000002_create_jobs_table.php
+│   │   ├── 2025_11_23_122659_create_game_rooms_table.php
+│   │   ├── 2025_11_23_122700_create_users_table.php
+│   │   ├── 2025_11_23_123300_create_reservations_table.php
+│   │   ├── 2025_11_23_124443_create_sessions_table.php
+│   │   └── 2025_11_24_012838_add_payment_to_reservations_table.php
+│   ├── seeders/
+│   │   ├── DatabaseSeeder.php
+│   └── database.sqlite
+│
+├── public/
+│
+├── resources/
+│   ├── css/
+│   ├── js/
+│   └── views/
+│       ├── auth/
+│       ├── dashboard/
+│       ├── game-rooms/
+│       ├── layouts/
+│       ├── receipts/
+│       ├── reservations/
+│       └── welcome.blade.php
+│
+├── routes/
+│   ├── web.php
+│
+├── storage/
+├── tests/
+├── vendor/
+│
+├── .editorconfig
+├── .env
+├── .env.example
+├── .gitattributes
+├── .gitignore
+│
+├── artisan
+├── composer.json
+├── composer.lock
+├── package.json
+├── package-lock.json
+├── phpunit.xml
+├── README.md
+└── vite.config.js
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+**Penjelasan Per Folder**
+
+#### app/Http/Controllers/
+
+Berisi seluruh controller aplikasi:
+
+-   AuthController – login & register
+
+-   DashboardController – dashboard user (admin, customer, resepsionis)
+
+-   GameRoomController – CRUD room game
+
+-   ReservationController – pemesanan
+
+-   ReceiptController – cetak struk & invoice
+
+#### app/Models/
+
+Model utama aplikasi:
+
+-   User.php
+
+-   GameRoom.php
+
+-   Reservation.php
+
+#### database/migrations/
+
+Kumpulan file migrasi untuk membuat tabel seperti:
+
+-   game_rooms
+
+-   users
+
+-   reservations
+
+-   sessions
+
+-   payments
+
+#### database/seeders/
+
+Berisi seeder untuk membuat data awal otomatis (role & user default).
+
+#### resources/views/
+
+Folder Blade Template:
+
+-   auth/ – halaman login, register
+
+-   dashboard/ – dashboard semua role
+
+-   game-rooms/ – halaman room
+
+-   reservations/ – form & daftar reservasi
+
+-   receipts/ – invoice & struk
+
+-   layouts/ – template umum
+
+-   welcome.blade.php – landing page
+
+#### routes/web.php
+
+Routing utama aplikasi:
+
+-   customer route
+
+-   admin route
+
+-   receptionist route
+
+---
+
+## Instalasi & Cara Menjalankan Aplikasi
+
+1. Clone Repository
+
+```
+git clone https://github.com/diestymendila/Lounge-Game-Room.git
+```
+
+```
+cd Lounge-Game-Room
+```
+
+2. Copy .env Template
+
+```
+cp .env.example .env
+```
+
+_Windows:_
+
+```
+copy .env.example .env
+```
+
+3. Isi konfigurasi database:
+
+```
+DB_DATABASE=lounge_game_room
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+4. Install dependensi
+
+-   Composer (backend)
+
+```
+composer install
+```
+
+-   Node Module (frontend)
+
+```
+npm install
+```
+
+5. Generate key
+
+```
+php artisan key:generate
+```
+
+6. Jalankan migrasi & seeder
+
+Seeder otomatis membuat user Admin, Resepsionis, dan Customer.
+
+```
+php artisan migrate --seed
+```
+
+Jika ada duplicate, gunakan:
+
+```
+php artisan migrate:fresh --seed
+```
+
+7. Buat Storage Link
+
+```
+php artisan storage:link
+```
+
+8. Jalankan Server
+
+```
+php artisan serve
+```
+
+9. Akses aplikasi pada:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+## Instalasi Dependensi
+
+1. Instalasi Dependensi Untuk Cetak Resi PDF
+
+-   Install package melalui Composer.
+    Jalankan perintah berikut:
+
+```
+composer require barryvdh/laravel-dompdf
+```
+
+-   Cara Menggunakan Dependensi
+
+**Contoh Generate PDF pada Controller (Seperti pada ReceiptController.php)**
+
+```php
+use PDF;
+
+public function generateReceipt($id)
+{
+    $reservation = Reservation::findOrFail($id);
+
+    $pdf = PDF::loadView('receipts.invoice', compact('reservation'));
+
+    return $pdf->stream('invoice.pdf');
+}
+```
+
+-   Cara membuat file Blade PDF
+
+_Pastikan file view Anda misalnya berada di:_
+
+```
+resources/views/receipts/invoice.blade.php
+```
+
+_Struktur HTML-nya sederhana & mendukung CSS inline._
+
+---
+
+2. Instalasi Dependensi Untuk Notifikasi Whatsapp
+
+**Cara Menggunakan Fonnte (WhatsApp Notification API)**
+
+-   Registrasi & Mendapatkan API Token
+
+```
+Daftar di https://fonnte.com
+```
+
+-   Masuk ke dashboard
+
+-   Buka menu API Token
+
+-   Hubungkan perangkat whatsapp anda dengan akun fonnte.com yang telah dibuat
+
+-   Copy token, _misalnya:_
+
+```
+abc123-def456-gh789
+```
+
+-   Masukkan token ke file .env:
+
+```.env
+FONNTE_TOKEN=abc123-def456-gh789
+```
+
+**Cara Mengirim Pesan WhatsApp via Fonnte API**
+
+-   Contoh implementasi di Laravel:
+
+```php
+function sendWhatsappMessage($target, $message)
+{
+    $token = env('FONNTE_TOKEN');
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "https://api.fonnte.com/send",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_HTTPHEADER => [
+            "Authorization: $token"
+        ],
+        CURLOPT_POSTFIELDS => [
+            'target' => $target,
+            'message' => $message
+        ]
+    ]);
+
+    $response = curl_exec($curl);
+    curl_close($curl);
+
+    return $response;
+}
+```
+
+**Contoh Pemanggilan Fungsi**
+
+```php
+sendWhatsappMessage(
+    $reservation->phone,
+    "Reservasi Anda berhasil!\n".
+    "Ruangan: {$reservation->room->name}\n".
+    "Mulai: {$reservation->start_time}\n".
+    "Selesai: {$reservation->end_time}\n".
+    "Total: Rp {$reservation->total_price}"
+);
+```
+
+---
+
+## Akun Default (Dari Seeder)
+
+-   Admin : admin@test.com - password
+-   Resepsionis : receptionist@test.com - password
+-   Customer : customer@test.com - password
+
+---
+
+## Panduan Penggunaan Aplikasi
+
+**Customer (Pengguna Biasa)**
+
+Langkah - langkah :
+
+1. Buka halaman utama → klik Register / Login
+
+2. Masuk ke dashboard
+
+3. Pilih Menu “Game Rooms”
+
+4. Pilih Ruangan → klik “Book Now”
+
+5. Isi form booking:
+
+    - tanggal booking
+
+    - jam mulai
+
+    - durasi
+
+    - Tekan Submit Booking
+
+    - Pada halaman konfirmasi, klik:
+
+    - Download Invoice
+
+    - atau lihat detail reservasi
+
+6. Selesai — Anda dapat melihat status booking di Riwayat Reservasi
+
+---
+
+**Admin**
+
+Langkah - langkah :
+
+1. Login dengan akun Admin.
+
+2. Masuk ke Admin Dashboard.
+
+3. Menu yang tersedia:
+
+    - Manage Rooms
+
+    - Manage Reservations
+
+    - Manage Users
+
+    - Generate Reports
+
+4. Untuk tambah room:
+
+    - Admin → Game Rooms → Add New Room
+
+    - Isi data lengkap + upload gambar.
+
+5. Untuk melihat semua reservasi:
+
+    - Admin → Reservations
+
+6. Untuk mencetak invoice:
+
+    - Reservations → pilih reservasi → Print Invoice
+
+7. Untuk mengelola user:
+
+    - Users → Tambah user atau ubah role
+
+---
+
+**Resepsionis**
+Langkah - langkah :
+
+1. Login sebagai resepsionis.
+
+2. Dashboard akan menampilkan:
+
+    - Daftar booking hari ini
+
+    - Status ruangan (Occupied / Free)
+
+3. Untuk cek-in pelanggan:
+
+    - Receptionist → Reservations
+
+    - Pilih “Check-in”
+
+4. Untuk cek-out:
+
+    - Pilih reservasi yang sedang berlangsung
+
+    - Klik “Check-out”
+
+5. Untuk pelanggan datang tanpa akun:
+
+    - Receptionist → Create Reservation
+
+    - Isi data pelanggan + room + durasi
+
+6. Untuk mencetak struk:
+
+    - Klik “Print Receipt”
